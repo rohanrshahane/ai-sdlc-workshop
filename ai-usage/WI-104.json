@@ -1,0 +1,15 @@
+{
+  "workItemId": 104,
+  "title": "Event date and time shown in raw format",
+  "type": "Bug",
+  "complexity": "Low",
+  "sprint": "Sprint 1",
+  "developer": "Reference solution",
+  "activities": [
+    { "name": "Code development", "aiDays": 0.1, "manualDays": 0.05 },
+    { "name": "Test case generation", "aiDays": 0.15, "manualDays": 0.05 },
+    { "name": "Refinement & optimisation", "aiDays": 0.0, "manualDays": 0.05 },
+    { "name": "Code review support", "aiDays": 0.05, "manualDays": 0.05 }
+  ],
+  "notes": "Example values for the reference solution — replace with the effort you actually record."
+}
