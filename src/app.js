@@ -2,7 +2,7 @@
 
 const path = require('path');
 const express = require('express');
-const { createStore, listEvents, getEvent, seatsRemaining } = require('./eventService');
+const { createStore, searchEvents, getEvent, seatsRemaining } = require('./eventService');
 
 function createApp({ store = createStore() } = {}) {
   const app = express();
@@ -14,7 +14,7 @@ function createApp({ store = createStore() } = {}) {
   app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
   app.get('/api/events', (req, res) => {
-    res.json(listEvents(store).map(toDto));
+    res.json(searchEvents(store, req.query.q).map(toDto));
   });
 
   app.get('/api/events/:id', (req, res) => {

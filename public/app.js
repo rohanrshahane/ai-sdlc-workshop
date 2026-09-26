@@ -24,12 +24,19 @@ function renderEvents(events) {
   }
 }
 
-async function loadEvents() {
+async function loadEvents(keyword = '') {
   statusEl.textContent = 'Loading events…';
-  const res = await fetch('/api/events');
+  const query = keyword.trim() ? `?q=${encodeURIComponent(keyword.trim())}` : '';
+  const res = await fetch(`/api/events${query}`);
   const events = await res.json();
-  statusEl.textContent = '';
+  statusEl.textContent = events.length ? '' : 'No events match your search.';
   renderEvents(events);
 }
+
+document.getElementById('search-form').addEventListener('submit', (event) => {
+  event.preventDefault();
+  const keyword = document.getElementById('search').value;
+  loadEvents(keyword).catch(() => { statusEl.textContent = 'Could not load events.'; });
+});
 
 loadEvents().catch(() => { statusEl.textContent = 'Could not load events.'; });

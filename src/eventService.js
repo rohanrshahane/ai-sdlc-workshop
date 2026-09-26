@@ -25,4 +25,16 @@ function seatsRemaining(event) {
   return Math.max(0, event.capacity - event.registered);
 }
 
-module.exports = { createStore, listEvents, getEvent, seatsRemaining };
+/**
+ * Work item 102: events whose title or description contains the keyword
+ * (case-insensitive, surrounding whitespace ignored). A missing or blank
+ * keyword returns every event.
+ */
+function searchEvents(store, keyword) {
+  const q = String(keyword ?? '').trim().toLowerCase();
+  const events = listEvents(store);
+  if (!q) return events;
+  return events.filter((e) => `${e.title}\n${e.description}`.toLowerCase().includes(q));
+}
+
+module.exports = { createStore, listEvents, getEvent, seatsRemaining, searchEvents };
