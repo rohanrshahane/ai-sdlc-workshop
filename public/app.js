@@ -15,8 +15,7 @@ function renderEvents(events) {
       <p class="description"></p>
       <span class="seats${full ? ' full' : ''}"></span>`;
     li.querySelector('h2').textContent = e.title;
-    // BUG (work item 104): the raw date and time are shown instead of a friendly format.
-    li.querySelector('.when').textContent = `${e.date} ${e.time}`;
+    li.querySelector('.when').textContent = e.when;
     li.querySelector('.where').textContent = e.location;
     li.querySelector('.description').textContent = e.description;
     li.querySelector('.seats').textContent = full ? 'Full' : `${e.seatsRemaining} seats left`;

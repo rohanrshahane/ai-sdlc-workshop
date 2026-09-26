@@ -2,14 +2,14 @@
 
 const path = require('path');
 const express = require('express');
-const { createStore, searchEvents, getEvent, seatsRemaining } = require('./eventService');
+const { createStore, searchEvents, getEvent, seatsRemaining, formatEventDateTime } = require('./eventService');
 
 function createApp({ store = createStore() } = {}) {
   const app = express();
   app.use(express.json());
   app.use(express.static(path.join(__dirname, '..', 'public')));
 
-  const toDto = (e) => ({ ...e, seatsRemaining: seatsRemaining(e) });
+  const toDto = (e) => ({ ...e, seatsRemaining: seatsRemaining(e), when: formatEventDateTime(e.date, e.time) });
 
   app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
