@@ -1,0 +1,7 @@
+{
+  "chat.agent.enabled": true,
+  "chat.promptFiles": true,
+  "chat.mcp.discovery.enabled": false,
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "files.exclude": { "allure-results": true, "test-results": true }
+}

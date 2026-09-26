@@ -1,0 +1,2 @@
+{ "workItemId": 3, "title": "UI component + unit tests", "type": "User Story", "complexity": "High", "sprint": "Paper sprint", "aiDays": 1.6, "manualDays": 2.4,
+  "notes": "Item-level totals reported in the paper (Table I); per-activity split not published." }

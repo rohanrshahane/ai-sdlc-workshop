@@ -1,0 +1,9 @@
+node_modules/
+allure-results/
+allure-report/
+test-results/
+playwright-report/
+reports/
+tools/mock-ado-mcp/state.json
+.env
+.playwright-mcp/

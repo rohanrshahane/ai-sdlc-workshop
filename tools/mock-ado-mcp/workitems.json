@@ -1,0 +1,117 @@
+{
+  "organization": "fdu-deepchain-lab",
+  "project": "CampusEvents",
+  "iteration": "CampusEvents\\Sprint 1",
+  "workItems": [
+    {
+      "id": 100,
+      "fields": {
+        "System.WorkItemType": "Feature",
+        "System.Title": "Campus events portal",
+        "System.State": "Active",
+        "System.AssignedTo": "Product Owner",
+        "System.IterationPath": "CampusEvents\\Sprint 1",
+        "System.Tags": "portal",
+        "System.Description": "<p>A single page where students can discover, search and register for campus events.</p>"
+      },
+      "relations": [
+        { "rel": "System.LinkTypes.Hierarchy-Forward", "targetId": 101, "attributes": { "name": "Child" } },
+        { "rel": "System.LinkTypes.Hierarchy-Forward", "targetId": 102, "attributes": { "name": "Child" } },
+        { "rel": "System.LinkTypes.Hierarchy-Forward", "targetId": 103, "attributes": { "name": "Child" } },
+        { "rel": "System.LinkTypes.Hierarchy-Forward", "targetId": 104, "attributes": { "name": "Child" } }
+      ],
+      "comments": []
+    },
+    {
+      "id": 101,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.Title": "View upcoming events",
+        "System.State": "Closed",
+        "System.AssignedTo": "Workshop Developer",
+        "System.IterationPath": "CampusEvents\\Sprint 1",
+        "Microsoft.VSTS.Common.Priority": 1,
+        "Microsoft.VSTS.Scheduling.StoryPoints": 3,
+        "Microsoft.VSTS.Common.ValueArea": "Business",
+        "System.Tags": "ui; api",
+        "System.Description": "<p>As a <b>student</b>, I want to see a list of upcoming campus events so that I can decide what to attend.</p>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<ol><li>The home page lists every upcoming event, sorted by date and time.</li><li>Each event shows its title, date and time, location, description and seats left.</li><li>A fully booked event is labelled <b>Full</b>.</li></ol>"
+      },
+      "relations": [
+        { "rel": "System.LinkTypes.Hierarchy-Reverse", "targetId": 100, "attributes": { "name": "Parent" } }
+      ],
+      "comments": [
+        { "author": "Workshop Developer", "date": "2026-09-20T15:10:00Z", "text": "Implemented and merged. Baseline for the workshop." }
+      ]
+    },
+    {
+      "id": 102,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.Title": "Search events by keyword",
+        "System.State": "Active",
+        "System.AssignedTo": "Workshop Developer",
+        "System.IterationPath": "CampusEvents\\Sprint 1",
+        "Microsoft.VSTS.Common.Priority": 1,
+        "Microsoft.VSTS.Scheduling.StoryPoints": 5,
+        "Microsoft.VSTS.Common.ValueArea": "Business",
+        "System.Tags": "ui; api; search",
+        "System.Description": "<p>As a <b>student</b>, I want to search events by keyword so that I can quickly find events on topics I care about.</p>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<ol><li><b>API:</b> <code>GET /api/events?q=&lt;keyword&gt;</code> returns only events whose <i>title or description</i> contains the keyword, case-insensitive. Leading and trailing whitespace in the keyword is ignored.</li><li><b>API:</b> when <code>q</code> is missing or blank, all events are returned.</li><li><b>UI:</b> the home page has a search box labelled <b>Search events</b> and a <b>Search</b> button. Submitting a keyword shows only matching events.</li><li><b>UI:</b> when nothing matches, the page shows the message <b>No events match your search.</b></li><li><b>UI:</b> clearing the search box and submitting shows all events again.</li></ol>"
+      },
+      "relations": [
+        { "rel": "System.LinkTypes.Hierarchy-Reverse", "targetId": 100, "attributes": { "name": "Parent" } },
+        { "rel": "System.LinkTypes.Related", "targetId": 101, "attributes": { "name": "Related" } }
+      ],
+      "comments": [
+        { "author": "Product Owner", "date": "2026-09-21T14:02:00Z", "text": "Search title and description only. Searching by tags or location is out of scope for this sprint." },
+        { "author": "QA Lead", "date": "2026-09-22T09:45:00Z", "text": "Please cover the no-results message and the whitespace case in both unit and E2E tests." }
+      ]
+    },
+    {
+      "id": 103,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.Title": "Register for an event with a capacity limit",
+        "System.State": "New",
+        "System.AssignedTo": "Workshop Developer",
+        "System.IterationPath": "CampusEvents\\Sprint 1",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "Microsoft.VSTS.Scheduling.StoryPoints": 8,
+        "Microsoft.VSTS.Common.ValueArea": "Business",
+        "System.Tags": "ui; api; registration",
+        "System.Description": "<p>As a <b>student</b>, I want to register for an event so that my seat is reserved.</p>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<ol><li><b>API:</b> <code>POST /api/events/:id/register</code> with JSON <code>{ name, email }</code> returns <b>201</b> and <code>{ eventId, name, seatsRemaining }</code>, and reduces seats remaining by one.</li><li><b>API:</b> returns <b>409</b> with <code>{ error: \"Event is full\" }</code> when no seats remain.</li><li><b>API:</b> returns <b>400</b> with <code>{ error: \"A valid name and email are required\" }</code> when name is blank or email is invalid.</li><li><b>API:</b> returns <b>404</b> for an unknown event.</li><li><b>UI:</b> each event that is not full has a <b>Register</b> button that opens a form for name and email; on success the page shows <b>You're registered!</b> and the seats-left count updates.</li><li><b>UI:</b> full events show no Register button.</li></ol>"
+      },
+      "relations": [
+        { "rel": "System.LinkTypes.Hierarchy-Reverse", "targetId": 100, "attributes": { "name": "Parent" } }
+      ],
+      "comments": [
+        { "author": "Product Owner", "date": "2026-09-22T11:30:00Z", "text": "Registrations can stay in memory for now; persistence is a later story." }
+      ]
+    },
+    {
+      "id": 104,
+      "fields": {
+        "System.WorkItemType": "Bug",
+        "System.Title": "Event date and time shown in raw format",
+        "System.State": "Active",
+        "System.AssignedTo": "Workshop Developer",
+        "System.IterationPath": "CampusEvents\\Sprint 1",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "Microsoft.VSTS.Common.Severity": "3 - Medium",
+        "System.Tags": "ui; bug",
+        "Microsoft.VSTS.TCM.ReproSteps": "<ol><li>Open the home page.</li><li>Look at the date line of <b>Intro to Machine Learning</b>.</li></ol><p><b>Actual:</b> <code>2026-10-12 18:00</code></p><p><b>Expected:</b> <code>Mon, Oct 12, 2026 · 6:00 PM</code></p>",
+        "System.Description": "<p>Dates and times are displayed exactly as stored, which is hard to read.</p>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<ol><li>Dates display as <code>Ddd, Mmm D, YYYY</code> and times as 12-hour <code>h:mm AM/PM</code>, joined by <code> · </code>. Example: <code>Mon, Oct 12, 2026 · 6:00 PM</code>.</li><li>Midnight shows as <code>12:00 AM</code> and noon as <code>12:00 PM</code>.</li><li>The formatting is a pure function with unit tests (regression tests), and does not depend on the computer's time zone.</li></ol>"
+      },
+      "relations": [
+        { "rel": "System.LinkTypes.Hierarchy-Reverse", "targetId": 100, "attributes": { "name": "Parent" } },
+        { "rel": "System.LinkTypes.Related", "targetId": 101, "attributes": { "name": "Related" } }
+      ],
+      "comments": [
+        { "author": "QA Lead", "date": "2026-09-23T16:20:00Z", "text": "Found during exploratory testing on Chrome. Please add a regression test for 00:00 and 12:00." }
+      ]
+    }
+  ]
+}

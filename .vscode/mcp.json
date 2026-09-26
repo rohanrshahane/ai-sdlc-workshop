@@ -1,0 +1,16 @@
+{
+  // Workshop configuration: a local mock of Azure DevOps + the Playwright MCP server.
+  // To use a real Azure DevOps organization instead, see .vscode/mcp.real-ado.jsonc.
+  "servers": {
+    "azure-devops-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${workspaceFolder}/tools/mock-ado-mcp/server.mjs"]
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@playwright/mcp", "--isolated"]
+    }
+  }
+}

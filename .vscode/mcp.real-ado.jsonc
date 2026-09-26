@@ -1,0 +1,25 @@
+{
+  // Configuration from the paper, for a real Azure DevOps organization.
+  // To use it: copy this file's contents over .vscode/mcp.json, run `az login`,
+  // then start the servers from the MCP view in VS Code. You will be asked for your org name.
+  "inputs": [
+    { "id": "ado_org", "type": "promptString", "description": "Azure DevOps organization name (e.g. 'contoso')" }
+  ],
+  "servers": {
+    "azure-devops-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@azure-devops/mcp", "${input:ado_org}"],
+      "env": {
+        // Only needed behind a corporate proxy:
+        // "HTTPS_PROXY": "http://proxy.example.com:8080",
+        // "NODE_EXTRA_CA_CERTS": "/path/to/corporate-ca.pem"
+      }
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    }
+  }
+}

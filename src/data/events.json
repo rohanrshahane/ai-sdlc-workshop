@@ -1,0 +1,8 @@
+[
+  { "id": 1, "title": "Intro to Machine Learning", "description": "Hands-on session covering regression and classification with Python notebooks.", "date": "2026-10-12", "time": "18:00", "location": "Muscarelle Center 105", "capacity": 40, "registered": 12 },
+  { "id": 2, "title": "Cloud Careers Panel", "description": "Alumni from cloud and data teams talk about internships and first jobs.", "date": "2026-10-15", "time": "12:30", "location": "Student Union Ballroom", "capacity": 120, "registered": 87 },
+  { "id": 3, "title": "Hackathon Kickoff", "description": "Form teams, pick a challenge and meet the mentors for the weekend hackathon.", "date": "2026-10-23", "time": "17:00", "location": "Becton Hall Atrium", "capacity": 80, "registered": 80 },
+  { "id": 4, "title": "Resume Clinic", "description": "One-on-one resume reviews with career services staff.", "date": "2026-10-28", "time": "10:00", "location": "Career Center", "capacity": 15, "registered": 6 },
+  { "id": 5, "title": "Robotics Lab Open House", "description": "See student robotics projects and try the robot arm demo.", "date": "2026-11-04", "time": "14:00", "location": "Engineering Lab 2", "capacity": 50, "registered": 21 },
+  { "id": 6, "title": "Data Visualization Workshop", "description": "Build clear charts and dashboards from real campus datasets.", "date": "2026-11-09", "time": "09:30", "location": "Library Lab B", "capacity": 25, "registered": 25 }
+]

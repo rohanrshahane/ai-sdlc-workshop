@@ -1,0 +1,2 @@
+{ "workItemId": 1, "title": "Feature implementation", "type": "User Story", "complexity": "High", "sprint": "Paper sprint", "aiDays": 2.2, "manualDays": 0.6,
+  "notes": "Item-level totals reported in the paper (Table I); per-activity split not published." }

@@ -1,0 +1,2 @@
+{ "workItemId": 4, "title": "Bug remediation + regression", "type": "Bug", "complexity": "Medium", "sprint": "Paper sprint", "aiDays": 2.15, "manualDays": 1.65,
+  "notes": "Item-level totals reported in the paper (Table I); per-activity split not published." }

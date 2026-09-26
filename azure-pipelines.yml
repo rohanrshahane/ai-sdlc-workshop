@@ -1,0 +1,54 @@
+# Layer 4 — Validation: Azure DevOps Pipelines
+# Runs unit + E2E tests on every push/PR and publishes the Allure report and AI metrics.
+trigger:
+  branches:
+    include: [main]
+pr:
+  branches:
+    include: [main]
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  CI: 'true'
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '20.x'
+    displayName: Use Node.js 20
+
+  - script: npm ci
+    displayName: Install dependencies
+
+  - script: npx playwright install --with-deps chromium
+    displayName: Install Playwright browser
+
+  - script: npm test
+    displayName: Unit tests (quality gate)
+
+  - script: npm run test:e2e
+    displayName: E2E tests (quality gate)
+
+  - script: npm run report
+    displayName: Build Allure report
+    condition: always()
+
+  - script: npm run metrics -- --sprint "Sprint 1"
+    displayName: AI metrics report
+    condition: always()
+
+  - task: PublishPipelineArtifact@1
+    displayName: Publish Allure report
+    condition: always()
+    inputs:
+      targetPath: allure-report
+      artifact: allure-report
+
+  - task: PublishPipelineArtifact@1
+    displayName: Publish AI metrics
+    condition: always()
+    inputs:
+      targetPath: reports
+      artifact: ai-metrics
