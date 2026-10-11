@@ -7,6 +7,7 @@
     "test": "jest",
     "test:e2e": "playwright test",
     "test:all": "npm run clean:results && npm test && npm run test:e2e",
+    "test:list": "node scripts/list-tests.mjs",
     "report": "allure generate allure-results",
     "report:open": "allure open allure-report",
     "demo:failure": "cross-env-shell DEMO_FAILURE=1 playwright test tests/e2e/demo-failure.spec.js",
