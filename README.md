@@ -2,7 +2,9 @@
 
 A hands-on sandbox for the paper **"AI-Augmented Software Development Lifecycle: A Novel and Integrated Framework"** (Shahane, Prakash, Vatsa — Deep Chain Lab, Fairleigh Dickinson University).
 
-You will take a work item from a (mock) Azure DevOps board, let **GitHub Copilot in Agent Mode** read it through the **Model Context Protocol (MCP)**, generate code, unit tests and **Playwright** E2E tests, validate them, review the evidence in an **Allure** report, and record **AI usage metrics** — the paper's full five-layer framework, running on your laptop.
+You will take a work item from a (mock) Azure DevOps board, let **GitHub Copilot in Agent Mode** read it through the **Model Context Protocol (MCP)** and generate the code, unit tests and **Playwright** E2E tests. Then **you** verify the result, confirm the commit, and list every QA test case that was generated — with the evidence in an **Allure** report.
+
+**The workshop in four moves:** ① fetch the work item → ② generate code and tests → ③ verify and confirm → ④ list the QA test cases.
 
 | Layer | What it does | In this repo |
 |---|---|---|
@@ -10,9 +12,9 @@ You will take a work item from a (mock) Azure DevOps board, let **GitHub Copilot
 | 2 · Orchestration | MCP servers + Copilot Agent Mode | `.vscode/mcp.json` → `azure-devops-mcp` + `playwright` |
 | 3 · Generation | Code, unit tests, E2E tests under repo guidelines | `.github/copilot-instructions.md`, `.github/instructions/`, `.github/prompts/` |
 | 4 · Validation | Test gate | `npm test`, `npm run test:e2e`, `azure-pipelines.yml`, `.github/workflows/ci.yml` |
-| 5 · Reporting | Test evidence + AI metrics | `npm run report` (Allure), `npm run metrics` (AI usage) |
+| 5 · Reporting | Test cases + test evidence | `npm run test:list`, `npm run report` (Allure) |
 
-**Contents:** [Part 1 Setup](#part-1--one-time-setup-about-15-minutes) · [Part 2 Preflight](#part-2--preflight-check) · [Part 3 Explore](#part-3--explore-the-sandbox-no-copilot-needed) · [Part 4 Connect Copilot](#part-4--connect-copilot-to-the-mcp-servers) · [Part 5 Developer flow](#part-5--developer-flow-build-work-item-102-with-the-agent) · [Part 6 QA flow](#part-6--qa-flow-tests-and-the-allure-report) · [Part 7 AI metrics](#part-7--ai-metrics) · [Start over](#start-over) · [Troubleshooting](#troubleshooting)
+**Contents:** [Part 1 Setup](#part-1--one-time-setup-about-15-minutes) · [Part 2 Preflight](#part-2--preflight-check) · [Part 3 Explore](#part-3--explore-the-sandbox-no-copilot-needed) · [Part 4 Connect Copilot](#part-4--connect-copilot-to-the-mcp-servers) · [Part 5 Fetch & generate](#part-5--fetch-and-generate-work-item-102-with-the-agent) · [Part 6 Verify & confirm](#part-6--verify-the-code-and-confirm-the-commit) · [Part 7 List QA test cases](#part-7--list-the-qa-test-cases) · [Start over](#start-over) · [Troubleshooting](#troubleshooting)
 
 > Commands below are for **macOS Terminal**. On **Windows**, use PowerShell or the VS Code terminal — the `npm` and `git` commands are identical; differences are noted where they matter.
 
@@ -134,16 +136,7 @@ npm run report:open
 
 `demo:failure` is *supposed* to end with **1 failed**. In the report open **chromium → demo-failure.spec.js → the failed test → Attachments**: screenshot, **video** and Playwright **trace**.
 
-### 10. Reproduce the paper's metrics
-
-```bash
-npm run metrics -- --dir ai-usage/examples/paper-sprint
-open reports/ai-metrics.html
-```
-
-(Windows: `start reports/ai-metrics.html`.) You should see **56%** mean AI contribution, **6.49** developer-days saved of **11.6** total — the paper's results.
-
-### 11. Read the rules the agent must follow
+### 10. Read the rules the agent must follow
 
 Open `.github/copilot-instructions.md`. These are the paper's **workflow invariants**: mandatory MCP fetch, display before code, guidelines confirmation.
 
@@ -151,7 +144,7 @@ Open `.github/copilot-instructions.md`. These are the paper's **workflow invaria
 
 ## Part 4 — Connect Copilot to the MCP servers
 
-### 12. Work on your own branch
+### 11. Work on your own branch
 
 ```bash
 git checkout -b my-work
@@ -160,16 +153,16 @@ code .
 
 If `code .` says **command not found**, that's fine — your branch was still created. Open VS Code → **File → Open Folder…** → choose `~/Projects/ai-sdlc-workshop`. Click **Trust** when asked.
 
-### 13. Start the two MCP servers
+### 12. Start the two MCP servers
 
 Open `.vscode/mcp.json`. Click the small **Start** link above `azure-devops-mcp`, then above `playwright`. Both should say **Running**.
 (Alternative: **⇧⌘P → MCP: List Servers** → start each one.)
 
-### 14. Switch Copilot Chat to Agent mode
+### 13. Switch Copilot Chat to Agent mode
 
 Open Chat (**⌃⌘I**) → mode dropdown under the chat box → **Agent**. Click the **tools** icon next to it and check that you see tools such as `wit_get_work_item` and `browser_navigate`.
 
-### 15. Quick connection test
+### 14. Quick connection test
 
 Type in Chat:
 
@@ -181,9 +174,9 @@ Copilot asks for permission to run the tool — click **Allow** (choose *Allow i
 
 ---
 
-## Part 5 — Developer flow: build work item 102 with the agent
+## Part 5 — Fetch and generate: work item 102 with the agent
 
-### 16. Run the standardised five-step workflow
+### 15. Run the standardised workflow
 
 Type in Chat:
 
@@ -191,64 +184,101 @@ Type in Chat:
 /implement-work-item
 ```
 
-Enter **102** when asked. Approve tool calls as they appear, and watch for each step:
+Enter **102** when asked. Approve tool calls as they appear, and watch the first four steps:
 
 | Step | What you should see |
 |---|---|
-| 1 · Fetch | The agent calls `wit_get_work_item` and `wit_list_work_item_comments`, then **displays the whole work item** — including the Product Owner's comment that limits scope. |
+| 1 · **Fetch** | The agent calls `wit_get_work_item` and `wit_list_work_item_comments`, then **displays the whole work item** — description, 5 acceptance criteria, and the Product Owner's comment that limits scope. |
 | 2 · Guidelines | It reads the files under `.github/` and replies **"I have read all repository guidelines."** |
-| 3 · Code + unit tests | It implements **only** the acceptance criteria, writes unit tests labelled `AC1:`, `AC2:` …, and runs `npm test`. |
-| 4 · E2E tests | It opens the app through the **Playwright MCP server**, writes tests in `tests/e2e/`, and runs `npm run test:e2e`. |
-| 5 · Commit | It shows `git status` and **asks you to confirm** a commit named `102: <summary>`. |
+| 3 · **Generate code + unit tests** | It implements **only** the acceptance criteria and writes unit tests labelled `AC1:`, `AC2:` …, then runs `npm test`. |
+| 4 · **Generate E2E tests** | It opens the app through the **Playwright MCP server**, writes tests in `tests/e2e/`, and runs `npm run test:e2e`. |
 
-If the agent starts coding **before** showing the work item, or skips the guidelines — stop it, discard its changes (see [Start over](#start-over)), and run `/implement-work-item` again. That's one of the failure modes the framework guards against.
+At step 5 the agent **stops and asks you to confirm the commit**. Don't say yes yet — verify first (Part 6).
 
-### 17. Check the result yourself
+If the agent starts coding **before** showing the work item, or skips the guidelines — stop it, discard its changes (see [Start over](#start-over)), and run `/implement-work-item` again.
+
+---
+
+## Part 6 — Verify the code and confirm the commit
+
+The agent wrote the code; **you** decide whether it's right. Leave the chat waiting and check four things:
+
+### 16. Is the change in scope?
+
+```bash
+git status
+git diff --stat
+git diff src public
+```
+
+Only files for search should have changed: `src/eventService.js`, `src/app.js`, `public/index.html`, `public/app.js`, plus new test files. Nothing else.
+
+### 17. Do all the tests pass?
+
+```bash
+npm run test:all
+```
+
+Every unit and E2E test should pass — including the ones for work item 101 that were already there.
+
+### 18. Does it actually work?
 
 ```bash
 npm start
 ```
 
-Search for `data`, then for `zzz` (you should see *No events match your search.*). Stop with **Ctrl + C**.
+Open http://localhost:3000 and tick off the acceptance criteria yourself:
+
+- [ ] There is a **Search events** box and a **Search** button
+- [ ] `data` shows only *Cloud Careers Panel* and *Data Visualization Workshop*
+- [ ] `WORKSHOP` (uppercase) still finds *Data Visualization Workshop*
+- [ ] `zzz` shows **No events match your search.**
+- [ ] Clearing the box and searching again shows all 6 events
+- [ ] `Ballroom` finds **nothing** — location is out of scope (Product Owner comment)
+
+Stop the app with **Ctrl + C**.
+
+### 19. Confirm — or push back
+
+- **All good?** Reply in Chat: `Yes, commit.` The commit message should be `102: <summary>`. Check with `git log --oneline -1`.
+- **Something wrong?** Tell the agent exactly what, e.g. *"Search must not match location — see the Product Owner's comment. Fix it and re-run the tests."* Then verify again.
 
 ---
 
-## Part 6 — QA flow: tests and the Allure report
+## Part 7 — List the QA test cases
+
+### 20. List every test case that was generated
 
 ```bash
-npm run test:all
-npm run report
-npm run report:open
+npm run test:list -- 102
 ```
 
-- Unit tests are grouped by **work item**; E2E tests appear under **chromium → spec file → work item**.
-- Each test name starts with the acceptance criterion it proves (`AC1:` …) — traceability from requirement to evidence.
-- Failed E2E tests carry a screenshot, a video and a trace (see step 9).
+You get every unit and E2E test for work item 102, grouped by acceptance criterion, and a copy in `reports/test-cases.md`. Run `npm run test:list` (no number) to see all work items.
 
----
-
-## Part 7 — AI metrics
-
-### 18. Record AI usage for your work item
+### 21. Check that every acceptance criterion is covered
 
 Type in Chat:
 
 ```
-/log-ai-usage
+/list-test-cases
 ```
 
-Enter **102** and **Sprint 1**, then answer the effort questions in developer-days (e.g. *0.3 AI, 0.05 manual*) for the four activities: **code development, test case generation, refinement & optimisation, code review support**. Count AI-assisted time only where Copilot made a material contribution.
+Enter **102**. The agent fetches the acceptance criteria through MCP and shows a table — **AC · criterion · unit tests · E2E tests** — flagging any criterion with no test. It doesn't change any code.
 
-The agent writes `ai-usage/WI-102.json`, builds the report, and posts a summary comment on the work item — refresh **http://localhost:4000** to see it.
-
-### 19. View the sprint report
+### 22. See the test evidence
 
 ```bash
-npm run metrics -- --sprint "Sprint 1"
-open reports/ai-metrics.html
+npm run report
+npm run report:open
 ```
 
-**AI contribution %** = AI-assisted effort ÷ total effort × 100. **Effort saved** = AI-assisted effort. The sprint figure is effort-weighted, as in the paper.
+The Allure report shows each test's steps, and for any failure, a screenshot and video (try `npm run demo:failure` first if you want to see one).
+
+---
+
+## Optional — AI usage metrics
+
+The paper also measures how much of each work item's effort was AI-assisted. If you're curious: run `/log-ai-usage` in Chat, then `npm run metrics`. To see the paper's own sprint (56% AI-assisted, 6.49 of 11.6 developer-days): `npm run metrics -- --dir ai-usage/examples/paper-sprint`.
 
 ---
 
@@ -260,7 +290,7 @@ open reports/ai-metrics.html
 
 ## Reference solution
 
-The `solution` branch has work items **102** and **104** built through the same flow, with tests and AI usage entries:
+The `solution` branch has work items **102** and **104** built through the same flow, with their tests:
 
 ```bash
 git diff my-work origin/solution --stat
@@ -294,17 +324,18 @@ To throw away uncommitted changes but keep your branch: `git checkout -- . && gi
 | `npm test` | Jest unit tests → `allure-results/` |
 | `npm run test:e2e` | Playwright E2E tests (starts its own app on port 3100) → `allure-results/` |
 | `npm run test:all` | Clean old results, then unit + E2E |
+| `npm run test:list` | List every QA test case by work item and acceptance criterion (`-- 102` for one item) → `reports/test-cases.md` |
 | `npm run report` / `npm run report:open` | Build / open the Allure report |
 | `npm run demo:failure` | Force one failing E2E test to show screenshot, video and trace |
 | `npm run ado:board` | Mock Azure Boards at http://localhost:4000 |
 | `npm run ado:reset` | Undo comments and state changes on the mock board |
-| `npm run metrics` | AI usage report → `reports/ai-metrics.html` |
+| `npm run metrics` | Optional: AI usage report → `reports/ai-metrics.html` |
 
 ## Troubleshooting
 
 | Symptom | Fix |
 |---|---|
-| `command not found: code` | Open the folder via **File → Open Folder…**, or install the shell command (Part 1, step 3.6). |
+| `command not found: code` | Open the folder via **File → Open Folder…**, or install the shell command (Part 1, step 3). |
 | "GitHub Copilot is deprecated" / only a **Disable** button | Expected — Copilot Chat is built in. Just sign in (Part 1, step 3). |
 | Chat has no **Agent** mode or no `/implement-work-item` | Make sure you're signed in and the folder is open (not a single file); **⇧⌘P → Developer: Reload Window**. |
 | Agent can't fetch the work item | **MCP: List Servers** → restart **azure-devops-mcp**. Test it from Terminal: `node scripts/check-mcp.mjs`. |
