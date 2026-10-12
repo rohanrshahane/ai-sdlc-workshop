@@ -1,7 +1,13 @@
 {
   "chat.agent.enabled": true,
   "chat.promptFiles": true,
-  "chat.mcp.discovery.enabled": false,
+  "chat.mcp.discovery.enabled": {
+    "claude-desktop": false,
+    "copilot": false,
+    "windsurf": false,
+    "cursor-global": false,
+    "cursor-workspace": false
+  },
   "github.copilot.chat.codeGeneration.useInstructionFiles": true,
   "files.exclude": { "allure-results": true, "test-results": true }
 }
